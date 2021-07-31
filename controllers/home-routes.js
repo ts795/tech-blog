@@ -67,4 +67,17 @@ router.get('/dashboard', async (req, res) => {
     }
 });
 
+// Route for the form to create a new blog post
+router.get('/new-blog-post', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('newBlogPost', {
+        pageDescription: 'Your Dashboard',
+        loggedIn: req.session.loggedIn
+    });
+});
+
 module.exports = router;
