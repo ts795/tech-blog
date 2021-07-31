@@ -37,9 +37,7 @@ User.init(
             async beforeBulkCreate(newUserData) {
                 // newUserData is an array of values to insert
                 for (var idx = 0; idx < newUserData.length; idx++) {
-                    console.log(newUserData[idx].dataValues);
                     newUserData[idx].dataValues.password = await bcrypt.hash(newUserData[idx].dataValues.password, 10);
-                    console.log(newUserData[idx].dataValues);
                 }
                 return newUserData;
             },
