@@ -1,6 +1,6 @@
-const { BlogPost } = require('../models');
+const { Post } = require('../models');
 
-const blogPostData = [
+const postData = [
     {
         title: "Javascript",
         contents: "A programming language for dynamic web content and back end servers",
@@ -13,6 +13,6 @@ const blogPostData = [
     }
 ];
 
-const seedBlogPosts = () => BlogPost.bulkCreate(blogPostData);
+const seedPosts = () => Post.bulkCreate(postData);
 
-module.exports = seedBlogPosts;
+module.exports = seedPosts;
