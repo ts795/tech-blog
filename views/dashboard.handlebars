@@ -1,4 +1,10 @@
 <div class="container">
+    {{#if loggedIn}}
+    <div class="row">
+        <div class="col-12 col-sm-12 m-2">
+            <button class="w-100 btn btn-lg btn-primary m-1" id="new-post-button">+ New Post</button>
+        </div>
+    </div>
     {{#each this.posts }}
     <div class="row">
         <div class="card col-12 col-sm-12 m-2">
@@ -11,4 +17,5 @@
         </div>
     </div>
     {{/each}}
+    {{/if}}
 </div>

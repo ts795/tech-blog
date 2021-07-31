@@ -42,4 +42,29 @@ router.get('/signup', (req, res) => {
     });
 });
 
+// Route for the user's dashboard
+router.get('/dashboard', async (req, res) => {
+    try {
+        posts = [];
+        if (req.session.loggedIn) {
+            const postData = await Post.findAll({
+                where: {
+                    creator_id: req.session.loggedInId
+                }
+            });
+            posts = postData.map((post) =>
+                post.get({ plain: true })
+            );
+        }
+        res.render('dashboard', {
+            posts,
+            loggedIn: req.session.loggedIn,
+            pageDescription: 'Your Dashboard'
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;
