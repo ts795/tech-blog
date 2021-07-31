@@ -30,4 +30,16 @@ router.get('/login', (req, res) => {
     });
 });
 
+// Route for signing up
+router.get('/signup', (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('signup', {
+        pageDescription: 'The Tech Blog'
+    });
+});
+
 module.exports = router;
