@@ -29,4 +29,23 @@ router.post('/new-comment', async (req, res) => {
     }
 });
 
+// Update existing blog post
+router.put('/:id', async (req, res) => {
+    try {
+        const postData = await Post.update(
+            {
+                title: req.body.title,
+                contents: req.body.contents,
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            });
+        res.status(200).json(postData);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
+
 module.exports = router;
