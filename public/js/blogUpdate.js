@@ -23,3 +23,25 @@ const updatePostFormHandler = async (event) => {
 document
     .querySelector('#blog-update-form')
     .addEventListener('submit', updatePostFormHandler);
+
+const deletePostHandler = async (event) => {
+    event.preventDefault();
+
+    // Get the blog post ID from the end of the URL
+    const postId = window.location.href.split("/").pop();
+
+    const response = await fetch('/api/blog/' + postId, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response.ok) {
+        document.location.replace('/dashboard');
+    } else {
+        alert('Failed to delete blog post');
+    }
+};
+
+document
+    .querySelector('#delete-button')
+    .addEventListener('click', deletePostHandler);
