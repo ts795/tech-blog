@@ -105,7 +105,9 @@ router.get('/blog-comments/:id', async (req, res) => {
                     include: {
                         model: User
                     }
-                }],
+                },
+                { model: User }
+            ],
             where: {
                 id: req.params.id
             }
