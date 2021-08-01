@@ -133,13 +133,27 @@ router.get('/blog-comments/:id', async (req, res) => {
 
 // Route for editing an existing blog post
 router.get('/blog-update/:id', async (req, res) => {
+    if (!req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+
     try {
         const postData = await Post.findOne({
             where: {
                 id: req.params.id
-            }
+            },
+            include: [
+                { model: User }
+            ],
         });
         const post = postData.get({ plain: true });
+
+        // Make sure the logged in user was the creator of the blog post
+        if (req.session.loggedInId !== post.user.id) {
+            res.redirect('/');
+            return;
+        }
 
         res.render('blogUpdate', {
             post,
