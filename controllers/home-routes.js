@@ -4,10 +4,19 @@ const { User, Post, Comment } = require('../models');
 // GET the homepage
 router.get('/', async (req, res) => {
     try {
-        const postData = await Post.findAll({});
+        const postData = await Post.findAll({
+            include: [
+                {
+                    model: User,
+                }]
+        });
         const posts = postData.map((post) =>
             post.get({ plain: true })
         );
+
+        for (var idx = 0; idx < posts.length; idx++) {
+            posts[idx].dateStringForPost = posts[idx].createdAt.toLocaleDateString();
+        }
         res.render('homepage', {
             posts,
             loggedIn: req.session.loggedIn,
@@ -56,6 +65,12 @@ router.get('/dashboard', async (req, res) => {
                 post.get({ plain: true })
             );
         }
+
+        // Convert the date to a string to display in the template
+        for (var idx = 0; idx < posts.length; idx++) {
+            posts[idx].dateStringForPost = posts[idx].createdAt.toLocaleDateString();
+        }
+
         res.render('dashboard', {
             posts,
             loggedIn: req.session.loggedIn,
