@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const { Post, Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
+const isPostCreator = require('../../utils/isPostCreator');
 
 // CREATE new blog post
-router.post('/new', async (req, res) => {
+router.post('/new', withAuth, async (req, res) => {
     try {
         const postData = await Post.create({
             title: req.body.title,
@@ -16,7 +18,7 @@ router.post('/new', async (req, res) => {
 });
 
 // CREATE new blog comment
-router.post('/new-comment', async (req, res) => {
+router.post('/new-comment', withAuth, async (req, res) => {
     try {
         const commentData = await Comment.create({
             blog_post_id: req.body.blog_post_id,
@@ -30,7 +32,7 @@ router.post('/new-comment', async (req, res) => {
 });
 
 // Update existing blog post
-router.put('/:id', async (req, res) => {
+router.put('/:id', withAuth, isPostCreator, async (req, res) => {
     try {
         const postData = await Post.update(
             {
@@ -49,7 +51,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete an existing blog post
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, isPostCreator, async (req, res) => {
     try {
         const postData = await Post.destroy(
             {

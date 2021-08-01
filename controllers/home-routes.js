@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require('../models');
+const withAuth = require('../utils/auth');
+const isPostCreator = require('../utils/isPostCreator');
 
 // GET the homepage
 router.get('/', async (req, res) => {
@@ -83,12 +85,7 @@ router.get('/dashboard', async (req, res) => {
 });
 
 // Route for the form to create a new blog post
-router.get('/new-blog-post', async (req, res) => {
-    if (!req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
-
+router.get('/new-blog-post', withAuth, async (req, res) => {
     res.render('newBlogPost', {
         pageDescription: 'Your Dashboard',
         loggedIn: req.session.loggedIn
@@ -132,28 +129,14 @@ router.get('/blog-comments/:id', async (req, res) => {
 });
 
 // Route for editing an existing blog post
-router.get('/blog-update/:id', async (req, res) => {
-    if (!req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
-
+router.get('/blog-update/:id', withAuth, isPostCreator, async (req, res) => {
     try {
         const postData = await Post.findOne({
             where: {
                 id: req.params.id
-            },
-            include: [
-                { model: User }
-            ],
+            }
         });
         const post = postData.get({ plain: true });
-
-        // Make sure the logged in user was the creator of the blog post
-        if (req.session.loggedInId !== post.user.id) {
-            res.redirect('/');
-            return;
-        }
 
         res.render('blogUpdate', {
             post,
