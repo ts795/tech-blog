@@ -95,4 +95,38 @@ router.get('/new-blog-post', async (req, res) => {
     });
 });
 
+// Route for the form to create a new blog post
+router.get('/blog-comments/:id', async (req, res) => {
+    try {
+        const postData = await Post.findOne({
+            include: [
+                {
+                    model: Comment,
+                    include: {
+                        model: User
+                    }
+                }],
+            where: {
+                id: req.params.id
+            }
+        });
+        const post = postData.get({ plain: true });
+        post.dateStringForPost = post.createdAt.toLocaleDateString();
+
+        // Convert each comment created date to a date string
+        for (var idx = 0; idx < post.comments.length; idx++) {
+            post.comments[idx].dateStringForComment = post.comments[idx].createdAt.toLocaleDateString();
+        }
+
+        res.render('blogComments', {
+            post,
+            loggedIn: req.session.loggedIn,
+            pageDescription: 'The Tech Blog'
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;
