@@ -1,0 +1,4 @@
+/* Style for showing a pointer for the cursor for clickable blog posts */
+.clickableBlogPost {
+    cursor: pointer;
+}
