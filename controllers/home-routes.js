@@ -55,6 +55,12 @@ router.get('/signup', (req, res) => {
 
 // Route for the user's dashboard
 router.get('/dashboard', async (req, res) => {
+    // Redirect to login if the user is not logged in
+    if (!req.session.loggedIn) {
+        res.redirect('/login');
+        return;
+    }
+
     try {
         posts = [];
         if (req.session.loggedIn) {
